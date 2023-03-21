@@ -1,0 +1,36 @@
+conments: |md
+    NN : Not Null
+    IDX : index
+|
+
+direction: left
+
+Users: {
+    shape: sql_table
+    id: serial
+    login_id: varchar(20) NN IDX-hash 
+    login_password: char(60) NN
+    first_name: varchar(20)
+    last_name: varchar(20)
+    email: varchar(100)
+    last_login_at: datetime NN
+    join_at: datetime NN
+}
+
+Todos.user_id -> Users.id
+Todos: {
+    shape: sql_table
+    id: serial PK
+    user_id: FK(Users.id) on delete
+    contents: varchar(1000)
+    done: boolean NN default false
+    create_at: datetime NN
+    modified_at: datetime NN
+}
+
+Todos.id <- Todo_Routines
+Todo_Routines: {
+    shape: sql_table
+    id: FK(Todos.id) on delete
+    routine: char(1) NN IDX w/ routine, id
+}
